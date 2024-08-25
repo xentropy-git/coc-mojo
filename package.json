@@ -1,0 +1,46 @@
+{
+  "name": "coc-mojo",
+  "version": "0.0.0-development",
+  "description": "A coc wrapper for the Mojo LSP provided by Modular.",
+  "author": "xentropy <claponsie@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.82"
+  },
+  "scripts": {
+    "watch": "node esbuild.mjs --watch",
+    "build": "node esbuild.mjs",
+    "prepare": "node esbuild.mjs"
+  },
+  "devDependencies": {
+    "coc.nvim": "^0.0.83-next.18",
+    "esbuild": "^0.19.8",
+    "typescript": "^5.3.3"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-mojo configuration",
+      "properties": {
+        "coc-mojo.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-mojo extension"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "coc-mojo.Command",
+        "title": "coc-mojo command title"
+      }
+    ]
+  }
+}

@@ -22,7 +22,16 @@ export async function resolveCompletionItem(
     result.documentation.kind === 'markdown'
   ) {
     result.documentation.value = result.documentation.value.replace(/&nbsp;/g, ' ');
+    result.documentation.value += '\n SANITY CHECK 0\n';
   }
+  if (result == null) {
+    return result;
+  }
+
+  if (result.documentation == null) {
+    result.documentation = { kind: 'markdown', value: '' };
+  }
+
   return result;
 }
 
@@ -36,6 +45,8 @@ export async function provideHover(
   if (hover && typeof hover.contents === 'object' && 'kind' in hover.contents && hover.contents.kind === 'markdown') {
     hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
   }
+
+  hover.contents.value += '\n SANITY CHECK\n';
   return hover;
 }
 
@@ -55,5 +66,13 @@ export async function provideSignatureHelp(
     }
   }
 
+    sign.signatures.push({
+        label: 'SANITY CHECK',
+        documentation: {
+        kind: 'markdown',
+        value: 'SANITY CHECK',
+        },
+        parameters: [],
+    });
   return sign;
 }

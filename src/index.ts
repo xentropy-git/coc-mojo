@@ -1,6 +1,7 @@
 import { ExtensionContext, services, workspace, LanguageClient } from 'coc.nvim'
 import { provideHover,
-    provideSignatureHelp
+    provideSignatureHelp,
+    resolveCompletionItem,
 } from './middleware'
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -11,7 +12,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
     documentSelector: ['mojo', '🔥'], // the filetypes for the language server
     middleware: {
       provideHover,
-      provideSignatureHelp
+      provideSignatureHelp,
+      resolveCompletionItem,
     },
   }
   const client = new LanguageClient(

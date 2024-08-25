@@ -1,4 +1,5 @@
 import { ExtensionContext, services, workspace, LanguageClient } from 'coc.nvim'
+import { provideHover } from './middleware'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const serverOptions = {
@@ -6,6 +7,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
   const clientOptions = {
     documentSelector: ['mojo', '🔥'], // the filetypes for the language server
+    middleware: {
+      provideHover,
+    },
   }
   const client = new LanguageClient(
     'coc-mojo', // the id
@@ -14,4 +18,5 @@ export async function activate(context: ExtensionContext): Promise<void> {
     clientOptions
   )
   context.subscriptions.push(services.registLanguageClient(client))
+
 }

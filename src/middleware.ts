@@ -5,8 +5,26 @@ import {
   type Position,
   type ProvideSignatureHelpSignature,
   type SignatureHelpContext,
+  type ResolveCompletionItemSignature,
+  type CompletionItem,
 } from 'coc.nvim'
 
+export async function resolveCompletionItem(
+  item: CompletionItem,
+  token: CancellationToken,
+  next: ResolveCompletionItemSignature,
+) {
+  const result = await next(item, token);
+  if (
+    result &&
+    typeof result.documentation === 'object' &&
+    'kind' in result.documentation &&
+    result.documentation.kind === 'markdown'
+  ) {
+    result.documentation.value = result.documentation.value.replace(/&nbsp;/g, ' ');
+  }
+  return result;
+}
 
 export async function provideHover(
   document: LinesTextDocument,
@@ -28,13 +46,14 @@ export async function provideSignatureHelp(
   token: CancellationToken,
   next: ProvideSignatureHelpSignature,
 ) {
-    const signatureHelp = await next(document, position, context, token);
-    if (signatureHelp && signatureHelp.signatures.length > 0) {
-        for (const signature of signatureHelp.signatures) {
-            if (signature.documentation && typeof signature.documentation === 'object' && 'kind' in signature.documentation && signature.documentation.kind === 'markdown') {
-                signature.documentation.value = signature.documentation.value.replace(/&nbsp;/g, ' ');
-            }
-        }
+  const sign = await next(document, position, context, token);
+  if (sign?.signatures.length) {
+    for (const info of sign.signatures) {
+      if (info.documentation && typeof info.documentation === 'object' && info.documentation.kind === 'markdown') {
+        info.documentation.value = info.documentation.value.replace(/&nbsp;/g, ' ');
+      }
     }
-    return signatureHelp;
+  }
+
+  return sign;
 }

@@ -14,6 +14,8 @@ export async function resolveCompletionItem(
   token: CancellationToken,
   next: ResolveCompletionItemSignature,
 ) {
+  const context = item.data?.context;
+  context?.logger.info('resolveCompletionItem', item);
   const result = await next(item, token);
   if (
     result &&
@@ -46,7 +48,6 @@ export async function provideHover(
     hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
   }
 
-  hover.contents.value += '\n SANITY CHECK\n';
   return hover;
 }
 

@@ -1,10 +1,13 @@
-import { ExtensionContext, services, workspace, LanguageClient } from 'coc.nvim'
+import { ExtensionContext, services, workspace, LanguageClient,
+} from 'coc.nvim'
 import { provideHover,
     provideSignatureHelp,
     resolveCompletionItem,
 } from './middleware'
 
 export async function activate(context: ExtensionContext): Promise<void> {
+
+  context.logger.info('coc-mojo activated')
   const serverOptions = {
     command: 'mojo-lsp-server', // run jls
   }
